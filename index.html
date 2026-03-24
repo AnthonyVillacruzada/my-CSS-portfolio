@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anthony D. Villacruzada - Portfolio</title>
+    <style>
+        /* CSS Variables for Light/Dark Mode */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --card-bg: #f8f9fa;
+            --header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --nav-bg: #e9ecef;
+            --link-color: #007bff;
+            --link-hover: #0056b3;
+            --border-color: #dee2e6;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --skill-bg: rgba(102, 126, 234, 0.1);
+            --accent: #ff6b6b;
+        }
+
+        /* Dark Mode - Applied when checkbox is checked */
+        :root:has(#theme-switch:checked) {
+            --bg-color: #0f0f23;
+            --text-color: #e9ecef;
+            --card-bg: #1a1a2e;
+            --header-bg: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --nav-bg: #24243e;
+            --link-color: #4dabf7;
+            --link-hover: #339af0;
+            --border-color: #3a3a4c;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --skill-bg: rgba(77, 171, 247, 0.2);
+            --accent: #ff8e8e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--bg-color) 0%, var(--card-bg) 100%);
+            min-height: 100vh;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Theme Toggle - Fixed position, works with :checked */
+        .theme-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 70px;
+            height: 36px;
+            background: var(--border-color);
+            border-radius: 50px;
+            cursor: pointer;
+            padding: 4px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #theme-switch {
+            display: none;
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .sun-icon {
+            left: 8px;
+            fill: #ff9f43;
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .moon-icon {
+            right: 8px;
+            fill: #a29bfe;
+            opacity: 0.4;
+            transform: scale(0.8);
+        }
+
+        .slider {
+            width: 28px;
+            height: 28px;
+            background: var(--bg-color);
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dark mode slider animation */
+        #theme-switch:checked + label .slider {
+            transform: translateX(34px);
+            background: #ffd700;
+        }
+        #theme-switch:checked+label .sun-icon {
+            opacity: 0.2;
+            transform: scale(0.7) rotate(90deg);
+        }
+
+        #theme-switch:checked+label .moon-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: var(--header-bg);
+            color: white;
+            text-align: center;
+            padding: 4rem 3rem;
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background: var(--nav-bg);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 4rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0 25px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover {
+            background: var(--link-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 123, 255, 0.3);
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        section:hover {
+            transform: translateY(-4px);
+        }
+
+        h3 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--link-color), var(--accent));
+            border-radius: 2px;
+        }
+
+        #AboutId img {
+            max-width: 280px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: block;
+            margin: 0 auto 2rem;
+            border: 4px solid var(--link-color);
+        }
+
+        #AboutId p {
+            font-size: 1.25rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        #SkillsId ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        #SkillsId li {
+            background: var(--skill-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #SkillsId li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--link-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        #SkillsId li:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--link-color);
+            color: white;
+        }
+
+        #SkillsId li:hover::before {
+            opacity: 0.1;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            text-align: left;
+        }
+
+        article {
+            background: var(--bg-color);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+        }
+
+        article:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h4 {
+            color: var(--link-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        article p {
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        article a {
+            display: inline-block;
+            margin: 0.75rem 0.5rem 0 0;
+            padding: 12px 24px;
+            background: var(--link-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        article a[href*="github"] {
+            background: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        article a:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+        }
+
+        article a[href*="github"]:hover {
+            background: #555;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        #ContactId {
+            text-align: center;
+        }
+
+        #ContactId p {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 10px;
+            }
+
+            header {
+                padding: 3rem 1.5rem;
+            }
+
+            nav {
+                padding: 1.5rem;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 8px;
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            #SkillsId ul {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            section {
+                padding: 2rem 1.25rem;
+                margin-bottom: 2rem;
+            }
+
+            h3 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1.1rem;
+            }
+
+            nav a {
+                display: block;
+                margin: 10px 0;
+            }
+
+            #SkillsId ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Theme Toggle - Pure CSS -->
+    <input type="checkbox" id="theme-switch">
+    <label for="theme-switch" class="theme-toggle">
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M12.1 22c4.9 0 9-4.1 9-9 0-4.6-3.5-8.3-8-8.9.1.5.2 1.1.2 1.6 0 5.2-4.2 9.5-9.5 9.5-.5 0-1.1-.1-1.6-.2.6 4.5 4.3 8 8.9 8z"/>
+        </svg>
+        <div class="slider"></div>
+    </label>
+
+    <div class="main-container">
+        <header>
+            <h1>Anthony D. Villacruzada</h1>
+            <p>Aspiring Software Developer | HTML | CSS | JavaScript | Java | C++ 
+                
+            </p>
+        </header>
+
+        <nav>
+            <a href="#AboutId">About</a> |
+            <a href="#SkillsId">Skills</a> |
+            <a href="#ProjectsId">Projects</a> |
+            <a href="#ContactId">Contact</a>
+        </nav>
+
+        <main>
+            <!-- About Section -->
+            <section id="AboutId">
+                <h3>About Me</h3>
+                <img src="images/BSC.png"
+                    alt="Anthony D. Villacruzada - Professional Photo" loading="lazy" />
+                <p>I'm a passionate student diving deep into web development. I love building beautiful, functional
+                    websites and am constantly learning new technologies to create amazing digital experiences.</p>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="SkillsId">
+                <h3>Core Skills</h3>
+                <ul>
+                    <li>HTML5</li>
+                    <li>CSS3</li>
+                    <li>JavaScript</li>
+                    <li>Java</li>
+                    <li>C++</li>
+                </ul>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="ProjectsId">
+                <h3>Featured Projects</h3>
+                <div class="projects-grid">
+                    <article>
+                        <h4>First HTML Project</h4>
+                        <p>My very first HTML project - a great introduction to web development fundamentals and
+                            structure.</p>
+                        <a href="https://github.com/AnthonyVillacruzada/first-html-project1/blob/main/index.html">View
+                            Code</a>
+                        <a href="https://first-html-project1-mu.vercel.app/">Live Demo</a>
+                    </article>
+                    <article>
+                        <h4>IT Student Schedule</h4>
+                        <p>A clean HTML schedule designed specifically for IT students to organize their academic life.
+                        </p>
+                        <a
+                            href="https://github.com/AnthonyVillacruzada/html-IT-students-schedule-Villacruzada-Anthony.git">View
+                            Code</a>
+                        <a href="https://html-it-students-schedule-villacruz.vercel.app/">Live Demo</a>
+                    </article>
+                    <article>
+                        <h4>IT Portal iFrame</h4>
+                        <p>Interactive HTML iFrame implementation for embedding IT portal content seamlessly.</p>
+                        <a href="https://github.com/AnthonyVillacruzada/html-IT-portal-iframe-Villacruzada-Anthony.git">View
+                            Code</a>
+                        <a href="https://html-it-portal-iframe-villacruz.vercel.app/">Live Demo</a>
+                    </article>
+                    <article>
+                        <h4>Study Playlist</h4>
+                        <p>A focused HTML study playlist interface to enhance productivity during learning sessions.</p>
+                        <a href="https://github.com/AnthonyVillacruzada/html-study-playlists-Villacruzada-Anthony.git">View
+                            Code</a>
+                        <a href="https://html-study-playlists-villacruz.vercel.app/">Live Demo</a>
+                    </article>
+                    <article>
+                        <h4>Student Registration</h4>
+                        <p>Professional HTML form for student registration with clean, user-friendly design.</p>
+                        <a
+                            href="https://github.com/AnthonyVillacruzada/html-student-registration-form-Villacruzada-Anthony.git">View
+                            Code</a>
+                        <a href="https://html-student-registration-form-villacruz.vercel.app/">Live Demo</a>
+                    </article>
+                    <article>
+                        <h4>HTML User Creation Form</h4>
+                        <p> A Simple HTML User Creation Form</p>
+                        <a
+                            href="https://github.com/AnthonyVillacruzada/html-user-account-creation-form-Villacruzada-Anthony.git">View
+                            Code</a>
+                        <a href="https://html-it-portal-iframe-villacruzada-chi.vercel.app/">Live Demo</a>
+                    </article>
+            </section>
+            <hr>
+            <!-- Contact Section -->
+            <section id="ContactId">
+                <h3>Contact </h3>
+                <p> Mobile Number:
+                    <b>09096802293</b>
+                </p>
+                <p> Email: <strong>
+                        <a href="mailto:thonydv012@gmail.com">thonydv012@gmail.com</a>
+                    </strong></p>
+        </main>
+        <footer>
+            <hr>
+            <p>&copy; 2024 Anthony D. Villacruzada. All rights reserved.</p>
+        </footer>
+</body>
+
+</html>
